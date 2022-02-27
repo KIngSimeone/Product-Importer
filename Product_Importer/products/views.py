@@ -15,4 +15,5 @@ def add_view(request):
         y = request_data['y']
 
         result = add.delay(x,y)
+        result = result.get()
         return Response({"result": result })
