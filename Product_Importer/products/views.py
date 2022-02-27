@@ -17,3 +17,13 @@ def add_view(request):
         result = add.delay(x,y)
         result = result.get()
         return Response({"result": result })
+
+@api_view(['GET', 'PUT', 'POST'])
+def upload(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    if request.method == 'POST':
+        file = request.FILES.get('file')
+        print(file)
+        return Response({"result": "OK"})
