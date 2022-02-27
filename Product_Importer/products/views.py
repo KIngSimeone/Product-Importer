@@ -2,7 +2,10 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .tasks import add
-from .utils import bulkCreateProducts
+from .utils import bulkCreateProducts, initiateFileprocess
+from .models import Products
+import pandas as pd
+
 
 
 @api_view(['GET', 'PUT', 'POST'])
@@ -26,5 +29,5 @@ def upload(request):
     """
     if request.method == 'POST':
         file = request.FILES.get('file')
-        bulkCreateProducts.delay(file)
+        initiateFileprocess(file)
         return Response({"result": "OK"})
