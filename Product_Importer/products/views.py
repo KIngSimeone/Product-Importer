@@ -1,9 +1,8 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-import io, csv, pandas as pd
 from .tasks import add
-from .models import Products
+from .utils import bulkCreateProducts
 
 
 @api_view(['GET', 'PUT', 'POST'])
@@ -27,12 +26,5 @@ def upload(request):
     """
     if request.method == 'POST':
         file = request.FILES.get('file')
-        reader = pd.read_csv(file)
-        for _, row in reader.iterrows():
-            new_file = Products(
-                       name= row["name"],
-                       sku= row['sku'],
-                       description= row["description"]
-                       )
-            new_file.save()
+        bulkCreateProducts.delay(file)
         return Response({"result": "OK"})
